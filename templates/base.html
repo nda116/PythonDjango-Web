@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Personal Library{% endblock %}</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/flatly/bootstrap.min.css"
+    rel="stylesheet"
+  >
+</head>
+<body class="bg-light">
+  <nav class="navbar navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}">Personal Library</a>
+      <div class="d-flex align-items-center gap-3">
+        {% if user.is_authenticated %}
+          <a class="text-white text-decoration-none" href="{% url 'library:book-list' %}">My books</a>
+          <a class="text-white text-decoration-none" href="{% url 'accounts:profile' %}">Profile</a>
+          <form class="m-0" action="{% url 'accounts:logout' %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-link text-white text-decoration-none p-0" type="submit">Log out</button>
+          </form>
+        {% else %}
+          <a class="text-white text-decoration-none" href="{% url 'accounts:login' %}">Log in</a>
+          <a class="text-white text-decoration-none" href="{% url 'accounts:register' %}">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <main class="container pb-4">
+    {% for message in messages %}
+      <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

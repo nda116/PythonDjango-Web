@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}My books{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1>My books</h1>
+      <p>Welcome, {{ user.username }}.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'library:book-create' %}">Add book</a>
+  </div>
+
+  <form class="mb-4" method="get">
+    <label class="form-label" for="q">Search by title or author</label>
+    <div class="d-flex gap-2">
+      <input class="form-control" id="q" name="q" value="{{ query }}" maxlength="200">
+      <button class="btn btn-outline-primary" type="submit">Search</button>
+      {% if query %}
+        <a class="btn btn-link" href="{% url 'library:book-list' %}">Clear</a>
+      {% endif %}
+    </div>
+  </form>
+
+  <div class="row g-3">
+    {% for book in books %}
+      <div class="col-md-6 col-lg-4">
+        <article class="card h-100">
+          <div class="card-body">
+            <h2 class="h5 card-title">
+              <a href="{% url 'library:book-detail' book.pk %}">{{ book.title }}</a>
+            </h2>
+            <p class="card-text">Author: {{ book.author }}</p>
+            {% if book.publication_year %}
+              <p class="card-text">Year: {{ book.publication_year }}</p>
+            {% endif %}
+          </div>
+        </article>
+      </div>
+    {% empty %}
+      <p class="text-muted">No matching books found.</p>
+    {% endfor %}
+  </div>
+{% endblock %}
